@@ -1,6 +1,6 @@
-1. LRU Page Replacement
+/*LRU Page Replacement
 Package Name: pagereplacement
-Class Name: LRUPageReplacement
+Class Name: LRUPageReplacement*/
 
 
 package pagereplacement;
@@ -44,3 +44,4 @@ public class LRUPageReplacement {
         sc.close();
     }
 }
+
