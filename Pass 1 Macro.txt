@@ -1,6 +1,6 @@
-Project name:   MacroProcessorProject
+/*Project name:   MacroProcessorProject
 Package name: macros
-Class name: MacoProcessor
+Class name: MacoProcessor*/
 
 
 package macros;
@@ -110,4 +110,5 @@ public class MacroProcessor {
         passTwo();
     }
 }
+
 
