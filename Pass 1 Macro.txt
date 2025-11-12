@@ -1,0 +1,113 @@
+Project name:   MacroProcessorProject
+Package name: macros
+Class name: MacoProcessor
+
+
+package macros;
+
+import java.util.*;
+
+public class MacroProcessor {
+    static class MacroEntry {
+        String name;
+        int mdtIndex;
+        public MacroEntry(String name, int mdtIndex) {
+            this.name = name;
+            this.mdtIndex = mdtIndex;
+        }
+    }
+    static List<MacroEntry> MNT = new ArrayList<>();
+    static List<String> MDT = new ArrayList<>();
+    static List<String> intermediateCode = new ArrayList<>();
+    
+    // Sample macro assembly code
+    static String[] sourceCode = {
+        "MACRO INCR &ARG1, &ARG2",
+        "ADD &ARG1, &ARG2",
+        "MEND",
+        "START",
+        "INCR NUM1, NUM2",
+        "MOV NUM3, NUM4",
+        "INCR NUM5, NUM6",
+        "END"
+    };
+    
+    // Pass-I: build MNT, MDT, and intermediate code (remove macro defs)
+    public static void passOne() {
+        boolean inMacroDef = false;
+        int mdtPtr = 0;
+        for (int i = 0; i < sourceCode.length; i++) {
+            String line = sourceCode[i];
+            if (line.startsWith("MACRO")) {
+                inMacroDef = true;
+                String[] parts = line.split(" ");
+                MNT.add(new MacroEntry(parts[1], MDT.size()));
+                MDT.add(line); // store header in MDT
+            } else if (line.equals("MEND")) {
+                inMacroDef = false;
+                MDT.add(line); // end of macro in MDT
+            } else if (inMacroDef) {
+                MDT.add(line); // macro body line
+            } else {
+                intermediateCode.add(line); // non-macro lines
+            }
+        }
+    }
+    
+    // Pass-II: expand macros in intermediate code using MNT and MDT
+    public static void passTwo() {
+        List<String> expandedCode = new ArrayList<>();
+        for (String line : intermediateCode) {
+            boolean macroCalled = false;
+            for (MacroEntry macro : MNT) {
+                if (line.startsWith(macro.name)) {
+                    macroCalled = true;
+                    // extract actual arguments
+                    String args = line.substring(macro.name.length()).trim();
+                    String[] actualArgs = args.split(",");
+                    // get MDT lines for this macro
+                    int mdtPtr = macro.mdtIndex + 1; // skip MACRO header
+                    while (!MDT.get(mdtPtr).equals("MEND")) {
+                        String macroLine = MDT.get(mdtPtr);
+                        // Replace formal args with actual args
+                        for (int k = 0; k < actualArgs.length; k++) {
+                            macroLine = macroLine.replace("&ARG" + (k+1), actualArgs[k].trim());
+                        }
+                        expandedCode.add(macroLine);
+                        mdtPtr++;
+                    }
+                    break;
+                }
+            }
+            if (!macroCalled) {
+                expandedCode.add(line);
+            }
+        }
+        System.out.println("\nPass-II: Expanded Code");
+        for (String line : expandedCode) {
+            System.out.println(line);
+        }
+    }
+    
+    public static void main(String[] args) {
+        // Pass-I
+        passOne();
+        System.out.println("Pass-I Output:");
+        System.out.println("Macro Name Table (MNT):");
+        for (MacroEntry m : MNT) {
+            System.out.println(m.name + " MDT Index: " + m.mdtIndex);
+        }
+        System.out.println("\nMacro Definition Table (MDT):");
+        for (int i = 0; i < MDT.size(); i++) {
+            System.out.println(i + ": " + MDT.get(i));
+        }
+        System.out.println("\nIntermediate Code (without macro defs):");
+        for (String line : intermediateCode) {
+            System.out.println(line);
+        }
+        
+        // Pass-II
+        passTwo();
+    }
+}
+

@@ -1,0 +1,86 @@
+SJF  Non preemptive
+
+Package Name: scheduling
+Class Name: SJFNonpreemptive
+
+
+package scheduling;
+import java.util.Scanner;
+
+class SJFNProcess {
+    int pid, burstTime, arrivalTime, waitingTime, turnaroundTime;
+    boolean isCompleted;
+
+    public SJFNProcess(int pid, int burstTime, int arrivalTime) {
+        this.pid = pid;
+        this.burstTime = burstTime;
+        this.arrivalTime = arrivalTime;
+        this.isCompleted = false;
+    }
+}
+
+public class SJFNonpreemptive {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input number of processes
+        System.out.print("Enter number of processes: ");
+        int n = sc.nextInt();
+        SJFNProcess[] processes = new SJFNProcess[n];
+
+        // Input arrival and burst times
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter arrival time and burst time for Process " + (i + 1) + ": ");
+            int at = sc.nextInt();
+            int bt = sc.nextInt();
+            processes[i] = new SJFNProcess(i + 1, bt, at);
+        }
+
+        int currentTime = 0;
+        int completed = 0;
+        int totalWT = 0, totalTAT = 0;
+
+        System.out.println("\nGantt Chart:");
+        while (completed < n) {
+            int idx = -1;
+            int minBT = Integer.MAX_VALUE;
+
+            // Find the process with the smallest burst time among the arrived processes
+            for (int i = 0; i < n; i++) {
+                if (!processes[i].isCompleted && processes[i].arrivalTime <= currentTime) {
+                    if (processes[i].burstTime < minBT) {
+                        minBT = processes[i].burstTime;
+                        idx = i;
+                    }
+                }
+            }
+
+            if (idx != -1) {
+                SJFNProcess p = processes[idx];
+                p.waitingTime = currentTime - p.arrivalTime;
+                currentTime += p.burstTime;
+                p.turnaroundTime = p.waitingTime + p.burstTime;
+                p.isCompleted = true;
+                totalWT += p.waitingTime;
+                totalTAT += p.turnaroundTime;
+                completed++;
+                System.out.print(" P" + p.pid + " ");
+            } else {
+                // If no process has arrived, just increment time
+                currentTime++;
+            }
+        }
+
+        // Output details
+        System.out.println("\n\nProcess\tArrival\tBurst\tWaiting\tTurnaround");
+        for (SJFNProcess p : processes) {
+            System.out.println("P" + p.pid + "\t" + p.arrivalTime + "\t" + p.burstTime + "\t" + p.waitingTime + "\t" + p.turnaroundTime);
+        }
+
+        System.out.printf("\nAverage Waiting Time: %.2f\n", (float) totalWT / n);
+        System.out.printf("Average Turnaround Time: %.2f\n", (float) totalTAT / n);
+
+        sc.close();
+    }
+}
+

@@ -1,0 +1,133 @@
+project name :   assemblerMain
+package name:   assemblermain
+class name:    AssemblerMain
+
+
+
+package assemblermain;  // this must match your package name
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class AssemblerPassOne {
+    ArrayList<String[]> ic = new ArrayList<>();
+    ArrayList<String[]> sym = new ArrayList<>();
+    ArrayList<String[]> lit = new ArrayList<>();
+    ArrayList<String[]> pol = new ArrayList<>();
+
+    // Sample mot table (mnemonic opcode table)
+    String[][] mot = {
+        {"STOP","IS","00"},
+        {"ADD","IS","01"},
+        {"SUB","IS","02"},
+        {"MULT","IS","03"},
+        {"MOVER","IS","04"},
+        {"MOVEM","IS","05"},
+        {"COMP","IS","06"},
+        {"BC","IS","07"},
+        {"DIV","IS","08"},
+        {"READ","IS","09"},
+        {"PRINT","IS","10"},
+        {"START","AD","01"},
+        {"END","AD","02"},
+        {"ORIGIN","AD","03"},
+        {"EQU","AD","04"},
+        {"LTORG","AD","05"},
+        {"DS","DL","01"},
+        {"DC","DL","02"},
+        {"AREG","RG","01"},
+        {"BREG","RG","02"},
+        {"CREG","RG","03"}
+    };
+
+    // Assign location counters
+    public String[][] assignLC(String[][] asm) {
+        int start_value = 0;
+        for (int i = 0; i < asm.length; i++) {
+            for (int j = 0; j < asm[i].length-1; j++) {
+                if (asm[i][j].equals("START")) {
+                    start_value = Integer.parseInt(asm[i][j + 1]);
+                }
+            }
+            if (i == 0) { continue; }
+            start_value = start_value + 1;
+            asm[i][0] = String.valueOf(start_value);
+        }
+        return asm;
+    }
+
+    // Process instructions to build tables
+    public void process(String[][] asm) {
+        int symIndex = 1, litIndex = 1, polIndex = 1;
+        for (int i = 0; i < asm.length; i++) {
+            String[] icEntry = new String[4];
+            String[] symEntry = new String[3];
+            String[] litEntry = new String[3];
+            String[] polEntry = new String[3];
+
+            // Fill IC with OP-codes and operands
+            for (int j = 0; j < asm[i].length; j++) {
+                for (String[] row : mot) {
+                    if (asm[i][j].equals(row[0])) {
+                        icEntry[j] = row[1] + "," + row[2];
+                    }
+                }
+                if (asm[i][j].matches("[A-Z]")) {
+                    symEntry[0] = "S" + symIndex;
+                    symEntry[1] = asm[i][j];
+                    symEntry[2] = asm[i][0];
+                    symIndex++;
+                }
+                if (asm[i][j].matches("[0-9]+") && !asm[i][j].equals(asm[i][0])) {
+                    litEntry[0] = "L" + litIndex;
+                    litEntry[1] = asm[i][j];
+                    litEntry[2] = asm[i][0];
+                    litIndex++;
+                }
+                if (asm[i][j].equals("START") || asm[i][j].equals("END")) {
+                    polEntry[0] = "P" + polIndex;
+                    polEntry[1] = asm[i][j];
+                    polEntry[2] = asm[i][0];
+                    polIndex++;
+                }
+            }
+            ic.add(icEntry);
+            if (symEntry[0] != null) sym.add(symEntry);
+            if (litEntry[0] != null) lit.add(litEntry);
+            if (polEntry[0] != null) pol.add(polEntry);
+        }
+    }
+
+    // Print tables
+    public void printTables() {
+        System.out.println("Intermediate Code (IC):");
+        for (String[] row : ic) { System.out.println(Arrays.toString(row)); }
+
+        System.out.println("\nSymbol Table (SYM):");
+        for (String[] row : sym) { System.out.println(Arrays.toString(row)); }
+
+        System.out.println("\nLiteral Table (LIT):");
+        for (String[] row : lit) { System.out.println(Arrays.toString(row)); }
+
+        System.out.println("\nPool Table (POOL):");
+        for (String[] row : pol) { System.out.println(Arrays.toString(row)); }
+    }
+}
+
+public class AssemblerMain {
+    public static void main(String[] args) {
+        // Sample assembly input: {LC, Label, Opcode, Operand, Extra}
+        String[][] asm_code = {
+            {"","","START","200",""},
+            {"","","MOVER","AREG","X"},
+            {"","","MOVEM","BREG","Y"},
+            {"","X","DS","1",""},
+            {"","","END","",""}
+        };
+
+        AssemblerPassOne assembler = new AssemblerPassOne();
+        assembler.assignLC(asm_code);
+        assembler.process(asm_code);
+        assembler.printTables();
+    }
+}
