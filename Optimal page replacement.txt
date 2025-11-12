@@ -1,7 +1,7 @@
-//Optimal Page Replacement Algorithm
+/*Optimal Page Replacement Algorithm
 
 Package Name: pagereplacement
-Class Name: OptimalPageReplacement
+Class Name: OptimalPageReplacement*/
 
 
 package pagereplacement;
@@ -148,5 +148,6 @@ Frames after inserting page 5: [5] [2] [1]
 Total page faults: 6*/
 
 	
+
 
 
