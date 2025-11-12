@@ -1,7 +1,7 @@
-Priority Preemptive
+/*Priority Preemptive
 Package Name: scheduling
 Class Name: PriorityPreemptive
-
+*/
 
 package scheduling;
 import java.util.Scanner;
@@ -85,3 +85,4 @@ public class PriorityPreemptive {
         sc.close();
     }
 }
+
