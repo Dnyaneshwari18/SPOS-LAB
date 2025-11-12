@@ -1,4 +1,4 @@
-Optimal Page Replacement Algorithm
+//Optimal Page Replacement Algorithm
 
 Package Name: pagereplacement
 Class Name: OptimalPageReplacement
@@ -131,7 +131,7 @@ public class OptimalPageReplacement {
 
 
 
-OUTPUT:
+/*OUTPUT:
 Enter number of frames:
 3
 Enter number of pages:
@@ -145,7 +145,8 @@ Frames after inserting page 4: [4] [2] [3]
 Frames after inserting page 2: [4] [2] [3]
 Frames after inserting page 1: [4] [2] [1]
 Frames after inserting page 5: [5] [2] [1]
-Total page faults: 6
+Total page faults: 6*/
 
 	
+
 
