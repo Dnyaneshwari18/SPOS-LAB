@@ -1,8 +1,8 @@
-        PRIORITY (NON PREMPTION):
+/*        PRIORITY (NON PREMPTION):
 
 Package Name: scheduling
 Class Name: PriorityNonPreemptive
-
+*/
 
 package scheduling;
 import java.util.Scanner;
@@ -72,3 +72,4 @@ public class PriorityNonPreemptive {
         sc.close();
     }
 }
+
