@@ -1,6 +1,6 @@
-project name :   assemblerMain
+/*project name :   assemblerMain
 package name:   assemblermain
-class name:    AssemblerMain
+class name:    AssemblerMain*/
 
 
 
@@ -131,3 +131,4 @@ public class AssemblerMain {
         assembler.printTables();
     }
 }
+
