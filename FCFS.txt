@@ -1,5 +1,5 @@
-Package name:  scheduling
-Class name: FCFS
+//Package name:  scheduling
+//Class name: FCFS
 
 
 
@@ -89,7 +89,7 @@ public class FCFS {
 
 
 
-OUTPUT :
+/*OUTPUT :
 
 Enter number of processes: 3
 Enter arrival time and burst time for process 1: 0 24
@@ -103,4 +103,5 @@ P1      0       24      0       24
 P2      0       3       24      27
 P3      0       4       27      31
 Average Waiting Time: 17.0
-Average Turnaround Time: 27.333334
+Average Turnaround Time: 27.333334*/
+
