@@ -1,6 +1,6 @@
-SJF Preemptive
+/*SJF Preemptive
 Package Name: scheduling
-Class Name: SJFPreemptive
+Class Name: SJFPreemptive*/
 
 
 package scheduling;
@@ -91,3 +91,4 @@ public class SJFPreemptive {
         sc.close();
     }
 }
+
