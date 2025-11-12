@@ -1,6 +1,6 @@
-2. FIFO Page Replacement
+/*FIFO Page Replacement
 Package Name: pagereplacement
-Class Name: FIFOPageReplacement
+Class Name: FIFOPageReplacement*/
 
 
 
@@ -47,3 +47,4 @@ public class FIFOPageReplacement {
         sc.close();
     }
 }
+
